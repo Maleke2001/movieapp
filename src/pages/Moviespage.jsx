@@ -22,32 +22,37 @@ const Moviespage = () => {
   return (
    <div>
       <Hero title=' Latest Movies'/>
-      <div className="absolute right-12 mt-4">
-      <Link to="/addpage">
-        <button className="bg-purple-500 text-white py-2 px-4 rounded-full">
-          Add
-           </button>
-       </Link>
-
-       <div className='grid grid-cols-4 gap-x-[10px] gap-y-5 mt-14 ml-60'>
-        {movies.map((movie) => (
-          <img
+    
+  <div className="absolute right-24 mt-[24px]">
+    <Link to="/addpage">
+      <button className="bg-purple-500 text-white py-2 px-4 rounded-full">
+        Add
+      </button>
+    </Link>
+  </div>
+  
+  <div className="flex justify-center mt-[100px]">
+    <div className="grid grid-cols-4 gap-x-[46px] gap-y-5">
+      {movies.map((movie) => (
+        <Link 
+            to={movie.title === 'Avengers Endgame' ? '/avengers' : `/movie/${movie.id}`} 
             key={movie.id}
-            src={movie.image}
-            alt={movie.alt}
-            className='w-[150px] h-[200px] object-cover'
-          />
-        ))}
-      </div>
-   
+          >
+            <img
+              src={movie.image}
+              alt={movie.alt}
+              className='w-[150px] h-[200px] object-cover'
+            />
+          </Link>
+      ))}
+    </div>
+  </div>
 
 
- 
-      </div>
+      <div className="mt-[90px]">
+    <Footers/>
+</div>
 
-      
-      
-     <Footers/>
 
     </div>
   ) 

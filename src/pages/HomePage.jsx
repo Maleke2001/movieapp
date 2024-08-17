@@ -31,8 +31,9 @@ const HomePage = () => {
     <div>
       <Hero />
       <h1 className='flex justify-center mt-14 text-2xl'>LATEST MOVIES</h1>
-      <div className='grid grid-cols-4 gap-x-[10px] gap-y-5 mt-14 ml-60'>
-        {movies.map((movie) => (
+      <div className="flex justify-center mt-[70px]">
+      <div className="grid grid-cols-4 gap-x-[46px] gap-y-5">
+        {movies.slice(0,8).map((movie) => (
           <Link 
             to={movie.title === 'Avengers Endgame' ? '/avengers' : `/movie/${movie.id}`} 
             key={movie.id}
@@ -45,15 +46,18 @@ const HomePage = () => {
           </Link>
         ))}
       </div>
+      </div>
+
       <div className='justify-end flex pe-52 pt-7'>
         <Link to="/movie-page" className="flex bg-purple-500 text-white py-2 px-4 mr-14 rounded-full">
           More
         </Link>
       </div>
       
-      <h1 className='flex justify-center mt-[200px] text-2xl'>LATEST SERIES</h1>
-      <div className='grid grid-cols-4 gap-x-4 gap-y-5 mt-14 ml-80'>
-        {series.map((serie) => (
+      <h1 className='flex justify-center mt-[70px] text-2xl'>LATEST SERIES</h1>
+      <div className="flex justify-center mt-[70px]">
+      <div className="grid grid-cols-4 gap-x-[46px] gap-y-5">
+        {series.slice(0,8).map((serie) => (
           <Link to={`/serie/${serie.id}`} key={serie.id}>
             <img
               src={serie.image}
@@ -63,7 +67,18 @@ const HomePage = () => {
           </Link>
         ))}
       </div>
-      <Footers />
+      </div>
+
+      <div className='justify-end flex pe-52 pt-7'>
+        <Link to="/series" className="flex bg-purple-500 text-white py-2 px-4 mr-14 rounded-full">
+          More
+        </Link>
+      </div>
+
+      <div>
+             <Footers />
+      </div>
+ 
     </div>
   );
 }
