@@ -33,12 +33,16 @@ const HomePage = () => {
       <h1 className='flex justify-center mt-14 text-2xl'>LATEST MOVIES</h1>
       <div className='grid grid-cols-4 gap-x-[10px] gap-y-5 mt-14 ml-60'>
         {movies.map((movie) => (
-          <img
+          <Link 
+            to={movie.title === 'Avengers Endgame' ? '/avengers' : `/movie/${movie.id}`} 
             key={movie.id}
-            src={movie.src}
-            alt={movie.alt}
-            className='w-[150px] h-[200px] object-cover'
-          />
+          >
+            <img
+              src={movie.image}
+              alt={movie.alt}
+              className='w-[150px] h-[200px] object-cover'
+            />
+          </Link>
         ))}
       </div>
       <div className='justify-end flex pe-52 pt-7'>
@@ -50,12 +54,13 @@ const HomePage = () => {
       <h1 className='flex justify-center mt-[200px] text-2xl'>LATEST SERIES</h1>
       <div className='grid grid-cols-4 gap-x-4 gap-y-5 mt-14 ml-80'>
         {series.map((serie) => (
-          <img
-            key={serie.id}
-            src={serie.src}
-            alt={serie.alt}
-            className='w-[150px] h-[200px] object-cover'
-          />
+          <Link to={`/serie/${serie.id}`} key={serie.id}>
+            <img
+              src={serie.image}
+              alt={serie.alt}
+              className='w-[150px] h-[200px] object-cover'
+            />
+          </Link>
         ))}
       </div>
       <Footers />

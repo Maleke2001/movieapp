@@ -11,6 +11,7 @@ import "./index.css"
 import Moviespage from "./pages/Moviespage";
 import Seriespage from "./pages/Seriespage";
 import Adding from "./pages/Adding";
+import Avengers from "./pages/Avengers";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,15 @@ const router = createBrowserRouter([
 
 {path:'/movies-page,',
   element:(<Moviespage/>)
-}
+},
+{ path:"/movie/:id",
+  element :(<Avengers/>) }, 
+
+{ path:"/serie/:id",
+ element :(<Avengers/>) },
+  
+ { path:"/edit/:id",
+  element :(<Adding/>) },
 
 
 

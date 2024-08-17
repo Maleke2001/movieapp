@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Hero from '../components/Hero';
-import addingImg from '../assets/adding.png';
 import Footer from '../components/Footer';
 
 const Adding = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [movieName, setMovieName] = useState('');
   const [description, setDescription] = useState('');
   const [country, setCountry] = useState('');
@@ -11,6 +14,43 @@ const Adding = () => {
   const [type, setType] = useState('');
   const [image, setImage] = useState('');
   const [preview, setPreview] = useState(null);
+
+  useEffect(() => {
+    // If there's an ID, fetch the current movie or series data to populate the form
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const movieResponse = await fetch(`http://localhost:3000/movies/${id}`);
+          if (movieResponse.ok) {
+            const movieData = await movieResponse.json();
+            populateForm(movieData);
+          } else {
+            const seriesResponse = await fetch(`http://localhost:3000/series/${id}`);
+            if (seriesResponse.ok) {
+              const seriesData = await seriesResponse.json();
+              populateForm(seriesData);
+            } else {
+              console.error('No data found for this ID.');
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [id]);
+
+  const populateForm = (data) => {
+    setMovieName(data.title || '');
+    setDescription(data.description || '');
+    setCountry(data.country || '');
+    setYear(data.year || '');
+    setType(data.type || '');
+    setImage(data.image || '');
+    setPreview(data.image || null);
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -29,17 +69,20 @@ const Adding = () => {
     e.preventDefault();
 
     const movieData = {
-      movieName,
+      title: movieName,
       description,
       country,
       year,
+      type,
       image, // The image is stored as a base64 string
     };
 
     try {
-      const endpoint = type === 'Movie' ? 'http://localhost:3000/movies' : 'http://localhost:3000/series';
+      const endpoint = type === 'Movie' ? `http://localhost:3000/movies/${id || ''}` : `http://localhost:3000/series/${id || ''}`;
+      const method = id ? 'PUT' : 'POST';
+
       const response = await fetch(endpoint, {
-        method: 'POST',
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -47,17 +90,10 @@ const Adding = () => {
       });
 
       if (response.ok) {
-        console.log('Movie/Series added successfully!');
-        // Optionally reset form
-        setMovieName('');
-        setDescription('');
-        setCountry('');
-        setYear('');
-        setType('');
-        setImage('');
-        setPreview(null);
+        console.log('Movie/Series saved successfully!');
+        navigate('/'); // Redirect to home page or wherever you want
       } else {
-        console.error('Failed to add Movie/Series');
+        console.error('Failed to save Movie/Series');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -66,9 +102,8 @@ const Adding = () => {
 
   return (
     <div>
-      <Hero title="ADD A MOVIE/SERIES" />
+      <Hero title={id ? "EDIT MOVIE/SERIES" : "ADD A MOVIE/SERIES"} />
       <form onSubmit={handleSubmit} className='flex mt-24 mx-auto max-w-screen-lg px-4'>
-      
         <div className="bg-gray-200 p-6 shadow-lg max-w-sm h-96">
           <input
             type="file"
@@ -162,7 +197,9 @@ const Adding = () => {
             </div>
 
             <div>
-                <button type='submit' className='border bg-purple-500 text-white border-gray-300 p-2 rounded-full w-full'>SAVE</button>
+              <button type='submit' className='border bg-purple-500 text-white border-gray-300 p-2 rounded-full w-full'>
+                {id ? "UPDATE" : "SAVE"}
+              </button>
             </div>
           </div>
         </div>
